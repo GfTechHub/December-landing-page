@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>December 2025 - Welcome</title>
+    <title>December 2024 - Welcome</title>
     <style>
         * {
             margin: 0;
@@ -143,7 +143,9 @@
     }
 
     .cta-button {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
         padding: 18px 50px;
         font-size: 1.2rem;
         font-weight: 600;
@@ -157,6 +159,7 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         animation: pulse 2s infinite;
         margin: 10px;
+        position: relative;
     }
 
     @keyframes pulse {
@@ -168,6 +171,72 @@
         transform: translateY(-5px) scale(1.05);
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
         animation: none;
+    }
+
+    .lock-icon {
+        font-size: 1.5rem;
+        transition: all 0.5s ease;
+        display: inline-block;
+    }
+
+    .cta-button.unlocked {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .cta-button.unlocked .lock-icon {
+        animation: unlockAnimation 0.6s ease-out forwards;
+    }
+
+    @keyframes unlockAnimation {
+        0% {
+            transform: rotate(0deg) scale(1);
+        }
+        25% {
+            transform: rotate(-15deg) scale(1.2);
+        }
+        50% {
+            transform: rotate(15deg) scale(1.3);
+        }
+        75% {
+            transform: rotate(-10deg) scale(1.2);
+        }
+        100% {
+            transform: rotate(0deg) scale(1);
+        }
+    }
+
+    .unlock-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        overflow: visible;
+    }
+
+    .spark {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0;
+    }
+
+    .cta-button.unlocking .spark {
+        animation: sparkBurst 0.8s ease-out forwards;
+    }
+
+    @keyframes sparkBurst {
+        0% {
+            opacity: 1;
+            transform: translate(0, 0) scale(0);
+        }
+        100% {
+            opacity: 0;
+            transform: translate(var(--tx), var(--ty)) scale(1);
+        }
     }
 
     .features {
@@ -327,7 +396,7 @@
         <div class="blob blob3"></div>
     </div>
 
-```
+
 <div class="particles" id="particles"></div>
 
 <div class="container">
@@ -336,9 +405,21 @@
         <p class="subtitle">Your workflow upgrade starts now.
 Three intelligent tools are hidden behind these buttons — tap to unlock</p>
         <div>
-            <a href="https://chat.openai.com/" class="cta-button">Get Started</a>
-            <a href="https://gemini.google.com/" class="cta-button">Learn More</a>
-            <a href="https://www.claude.com/download" class="cta-button">Learn More</a>
+            <a href="https://chat.openai.com/" class="cta-button" data-button="1">
+                <span class="lock-icon">🔒</span>
+                <span>UNLOCK</span>
+                <div class="unlock-particles"></div>
+            </a>
+            <a href="https://gemini.google.com/" class="cta-button" data-button="2">
+                <span class="lock-icon">🔒</span>
+                <span>UNLOCK</span>
+                <div class="unlock-particles"></div>
+            </a>
+            <a href="https://www.claude.com/download" class="cta-button" data-button="3">
+                <span class="lock-icon">🔒</span>
+                <span>UNLOCK</span>
+                <div class="unlock-particles"></div>
+            </a>
         </div>
     </div>
 
@@ -362,7 +443,7 @@ Three intelligent tools are hidden behind these buttons — tap to unlock</p>
 </div>
 
 <footer>
-    Created by <a href="#">Ezekiel</a>
+    Created by <a href="https://www.linkedin.com/in/ezekielifeoluwa?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app">Ezekiel</a>
 </footer>
 
 <script>
@@ -386,6 +467,48 @@ Three intelligent tools are hidden behind these buttons — tap to unlock</p>
         cards.forEach((card, index) => {
             const speed = (index + 1) * 10;
             card.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+        });
+    });
+
+    // Button unlock functionality
+    const buttons = document.querySelectorAll('.cta-button');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            if (!this.classList.contains('unlocked')) {
+                // Add unlocking class for spark animation
+                this.classList.add('unlocking');
+                
+                // Create spark particles
+                const particlesDiv = this.querySelector('.unlock-particles');
+                particlesDiv.innerHTML = '';
+                
+                for (let i = 0; i < 12; i++) {
+                    const spark = document.createElement('div');
+                    spark.className = 'spark';
+                    const angle = (i / 12) * Math.PI * 2;
+                    const distance = 60;
+                    spark.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                    spark.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+                    spark.style.left = '50%';
+                    spark.style.top = '50%';
+                    particlesDiv.appendChild(spark);
+                }
+                
+                // Change lock icon to unlock
+                setTimeout(() => {
+                    const lockIcon = this.querySelector('.lock-icon');
+                    lockIcon.textContent = '🔓';
+                    this.classList.add('unlocked');
+                }, 300);
+                
+                // Remove unlocking class after animation
+                setTimeout(() => {
+                    this.classList.remove('unlocking');
+                }, 800);
+            }
         });
     });
 </script>
