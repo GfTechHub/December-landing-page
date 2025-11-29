@@ -279,6 +279,29 @@
         }
     }
 
+    footer {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 40px 20px;
+        color: white;
+        font-size: 1rem;
+        opacity: 0;
+        animation: fadeIn 2s ease-out 1s forwards;
+    }
+
+    footer a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    footer a:hover {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        letter-spacing: 1px;
+    }
+
     @media (max-width: 768px) {
         h1 {
             font-size: 2.5rem;
@@ -304,7 +327,7 @@
         <div class="blob blob3"></div>
     </div>
 
-
+```
 <div class="particles" id="particles"></div>
 
 <div class="container">
@@ -337,6 +360,10 @@ Three intelligent tools are hidden behind these buttons — tap to unlock</p>
         </div>
     </div>
 </div>
+
+<footer>
+    Created by <a href="#">Ezekiel</a>
+</footer>
 
 <script>
     // Create floating particles
